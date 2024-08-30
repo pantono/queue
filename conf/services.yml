@@ -1,0 +1,6 @@
+QueueManager:
+  class: Pantono\Queue\QueueManager
+QueueConnection:
+  class: Pantono\Queue\Factory\DsnQueueFactory
+  parameters:
+    - $queue.dsn

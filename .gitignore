@@ -1,0 +1,4 @@
+.idea
+composer.lock
+phinx.php
+vendor

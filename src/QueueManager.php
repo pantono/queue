@@ -194,6 +194,8 @@ class QueueManager
             }
             try {
                 $consumer->acknowledge($message);
+                $task->setDatePickedUp(new \DateTimeImmutable());
+                $this->saveTask($task);
                 Timer::start('task');
                 $response = $controller->process(new ParameterBag($task->getParameters()));
                 Timer::end('task');

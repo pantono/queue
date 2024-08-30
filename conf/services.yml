@@ -6,5 +6,3 @@ QueueFactory:
     - "@QueueConnection"
 QueueConnection:
   class: Pantono\Queue\Factory\DsnQueueFactory
-  parameters:
-    - $queue.dsn

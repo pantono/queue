@@ -6,13 +6,14 @@ use Pantono\Contracts\Attributes\Filter;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Database\Traits\SavableModel;
 use DateTimeImmutable;
+use Pantono\Contracts\Attributes\FieldName;
 
 class QueueTask
 {
     use SavableModel;
 
     private ?int $id = null;
-    #[Locator('QueueManager', 'getSubscriptionById')]
+    #[Locator('QueueManager', 'getSubscriptionById'), FieldName('subscription_id')]
     private QueueSubscription $queueSubscription;
     private ?string $messageId = null;
 

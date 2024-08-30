@@ -4,13 +4,14 @@ namespace Pantono\Queue\Model;
 
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Database\Traits\SavableModel;
+use Pantono\Contracts\Attributes\FieldName;
 
 class QueueSubscription
 {
     use SavableModel;
 
     private ?int $id = null;
-    #[Locator('Queue', 'getQueueById')]
+    #[Locator('Queue', 'getQueueById'), FieldName('queue_id')]
     private Queue $queue;
     private string $taskName;
     private string $controller;

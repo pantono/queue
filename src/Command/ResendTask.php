@@ -20,7 +20,7 @@ class ResendTask extends Command
 
     protected function configure(): void
     {
-        $this->setName('app:resend-task')
+        $this->setName('queue:resend-task')
             ->addArgument('id', InputArgument::REQUIRED, 'Task ID');
     }
 

@@ -18,7 +18,7 @@ class QueueTask
 
     private DateTimeImmutable $dateCreated;
     private ?DateTimeImmutable $datePickedUp = null;
-    private DateTimeImmutable $dateCompleted;
+    private ?DateTimeImmutable $dateCompleted = null;
     #[Filter('json_decode')]
     private array $parameters = [];
     #[Filter('json_decode')]
@@ -78,12 +78,12 @@ class QueueTask
         $this->datePickedUp = $datePickedUp;
     }
 
-    public function getDateCompleted(): DateTimeImmutable
+    public function getDateCompleted(): ?DateTimeImmutable
     {
         return $this->dateCompleted;
     }
 
-    public function setDateCompleted(DateTimeImmutable $dateCompleted): void
+    public function setDateCompleted(?DateTimeImmutable $dateCompleted): void
     {
         $this->dateCompleted = $dateCompleted;
     }

@@ -1,3 +1,3 @@
-# r-cloud/queue-module
+# pantono/queue-module
 
 Pantono Queue Module

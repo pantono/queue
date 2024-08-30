@@ -11,7 +11,7 @@ class QueueTask
     use SavableModel;
 
     private ?int $id = null;
-    #[Locator('Queue', 'getSubscriptionById')]
+    #[Locator('QueueManager', 'getSubscriptionById')]
     private QueueSubscription $queueSubscription;
     private ?string $messageId = null;
 

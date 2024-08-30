@@ -13,12 +13,9 @@ class RunQueue extends Command
 {
     private QueueManager $queueManager;
 
-    private string $appName;
-
-    public function __construct(QueueManager $queueManager, string $appName)
+    public function __construct(QueueManager $queueManager)
     {
         $this->queueManager = $queueManager;
-        $this->appName = $appName;
         parent::__construct();
     }
 
@@ -29,7 +26,7 @@ class RunQueue extends Command
         if ($queue === null) {
             $queue = new Queue();
             $queue->setName($queueName);
-            $queue->setShortName(strtolower(str_replace(' ', '_', $this->appName)));
+            $queue->setShortName(strtolower(str_replace(' ', '_', $queueName)));
             $queue->setDateCreated(new \DateTimeImmutable());
             $this->queueManager->saveQueue($queue);
             $output->writeln('Created new queue ' . $queue->getName() . ' (' . $queue->getShortName() . ')');

@@ -4,7 +4,6 @@ namespace Pantono\Queue\Queue;
 
 use Interop\Queue\Context;
 use Interop\Queue\Queue;
-use Interop\Queue\SubscriptionConsumer;
 use Interop\Queue\Topic;
 use Interop\Queue\Message;
 use Interop\Queue\Consumer;
@@ -12,13 +11,9 @@ use Interop\Queue\Consumer;
 class QueueInstance
 {
     private Context $context;
-
     private Topic $topic;
-
     private Queue $queue;
     private ?Consumer $consumer = null;
-
-    private ?SubscriptionConsumer $subscriptionConsumer = null;
 
     public function __construct(Context $context, Topic $topic, Queue $queue)
     {

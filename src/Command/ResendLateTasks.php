@@ -14,8 +14,12 @@ class ResendLateTasks extends Command
     public function __construct(QueueManager $queueManager)
     {
         $this->queueManager = $queueManager;
-
         parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this->setName('app:resend-late-tasks');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -25,10 +29,5 @@ class ResendLateTasks extends Command
             $this->queueManager->resendTask($task);
         }
         return 0;
-    }
-
-    protected function configure(): void
-    {
-        $this->setName('app:resend-late-tasks');
     }
 }

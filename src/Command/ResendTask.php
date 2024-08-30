@@ -15,8 +15,13 @@ class ResendTask extends Command
     public function __construct(QueueManager $queueManager)
     {
         $this->queueManager = $queueManager;
-
         parent::__construct();
+    }
+
+    protected function configure(): void
+    {
+        $this->setName('app:resend-task')
+            ->addArgument('id', InputArgument::REQUIRED, 'Task ID');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -30,11 +35,5 @@ class ResendTask extends Command
         $this->queueManager->resendTask($task);
         $output->writeln('Resent task ' . $task->getId());
         return 0;
-    }
-
-    protected function configure()
-    {
-        $this->setName('app:resend-task')
-            ->addArgument('id', InputArgument::REQUIRED, 'Task ID');
     }
 }

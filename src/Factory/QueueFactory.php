@@ -5,6 +5,7 @@ namespace Pantono\Queue\Factory;
 use Interop\Queue\ConnectionFactory;
 use Pantono\Queue\Model\Queue;
 use Pantono\Queue\Queue\QueueInstance;
+use Pantono\Utilities\ApplicationHelper;
 
 class QueueFactory
 {
@@ -14,10 +15,10 @@ class QueueFactory
 
     private array $queues = [];
 
-    public function __construct(ConnectionFactory $connectionFactory, string $env)
+    public function __construct(ConnectionFactory $connectionFactory)
     {
         $this->connectionFactory = $connectionFactory;
-        $this->env = $env;
+        $this->env = ApplicationHelper::getEnv();
     }
 
     public function generateQueue(Queue $queue): QueueInstance

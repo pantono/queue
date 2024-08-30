@@ -5,6 +5,7 @@ namespace Pantono\Queue\Model;
 use Pantono\Contracts\Attributes\Filter;
 use Pantono\Contracts\Attributes\Locator;
 use Pantono\Database\Traits\SavableModel;
+use DateTimeImmutable;
 
 class QueueTask
 {
@@ -15,9 +16,9 @@ class QueueTask
     private QueueSubscription $queueSubscription;
     private ?string $messageId = null;
 
-    private \DateTimeImmutable $dateCreated;
-    private \DateTimeImmutable $datePickedUp;
-    private \DateTimeImmutable $dateCompleted;
+    private DateTimeImmutable $dateCreated;
+    private ?DateTimeImmutable $datePickedUp = null;
+    private DateTimeImmutable $dateCompleted;
     #[Filter('json_decode')]
     private array $parameters = [];
     #[Filter('json_decode')]
@@ -57,32 +58,32 @@ class QueueTask
         $this->messageId = $messageId;
     }
 
-    public function getDateCreated(): \DateTimeImmutable
+    public function getDateCreated(): DateTimeImmutable
     {
         return $this->dateCreated;
     }
 
-    public function setDateCreated(\DateTimeImmutable $dateCreated): void
+    public function setDateCreated(DateTimeImmutable $dateCreated): void
     {
         $this->dateCreated = $dateCreated;
     }
 
-    public function getDatePickedUp(): \DateTimeImmutable
+    public function getDatePickedUp(): ?DateTimeImmutable
     {
         return $this->datePickedUp;
     }
 
-    public function setDatePickedUp(\DateTimeImmutable $datePickedUp): void
+    public function setDatePickedUp(?DateTimeImmutable $datePickedUp): void
     {
         $this->datePickedUp = $datePickedUp;
     }
 
-    public function getDateCompleted(): \DateTimeImmutable
+    public function getDateCompleted(): DateTimeImmutable
     {
         return $this->dateCompleted;
     }
 
-    public function setDateCompleted(\DateTimeImmutable $dateCompleted): void
+    public function setDateCompleted(DateTimeImmutable $dateCompleted): void
     {
         $this->dateCompleted = $dateCompleted;
     }

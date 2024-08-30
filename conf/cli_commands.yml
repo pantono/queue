@@ -4,3 +4,5 @@ resend_task:
   class: Pantono\Queue\Command\ResendTask
 resend_late_tasks:
   class: Pantono\Queue\Command\ResendLateTasks
+update_queue_subscriptions:
+  class: Pantono\Queue\Command\UpdateQueueSubscriptions

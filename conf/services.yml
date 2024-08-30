@@ -2,6 +2,9 @@ QueueManager:
   class: Pantono\Queue\QueueManager
 QueueFactory:
   class: Pantono\Queue\Factory\QueueFactory
+DsnQueueFactory:
+  class: Pantono\Queue\Factory\DsnQueueFactory
+  alias: Interop\Queue\ConnectionFactory
 QueueConnection:
   class: Pantono\Queue\Factory\DsnQueueFactory
   parameters:

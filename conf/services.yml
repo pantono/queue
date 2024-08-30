@@ -1,5 +1,7 @@
 QueueManager:
   class: Pantono\Queue\QueueManager
+QueueFactory:
+  class: Pantono\Queue\Factory\QueueFactory
 QueueConnection:
   class: Pantono\Queue\Factory\DsnQueueFactory
   parameters:

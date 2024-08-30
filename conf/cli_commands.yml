@@ -1,0 +1,6 @@
+run_queue:
+  class: Pantono\Queue\RunQueue
+resend_task:
+  class: Pantono\Queue\ResendTask
+resend_late_tasks:
+  class: Pantono\Queue\ResendLateTasks

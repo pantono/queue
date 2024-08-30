@@ -7,14 +7,15 @@ use Nyholm\Dsn\DsnParser;
 use Enqueue\AmqpLib\AmqpConnectionFactory;
 use Enqueue\Fs\FsConnectionFactory;
 use Interop\Queue\ConnectionFactory;
+use Pantono\Config\Config;
 
 class DsnQueueFactory implements FactoryInterface
 {
     private string $dsn;
 
-    public function __construct(string $dsn)
+    public function __construct(Config $config)
     {
-        $this->dsn = $dsn;
+        $this->dsn = $config->getApplicationConfig()->getValue('queue.dsn');
     }
 
     public function createInstance(): ConnectionFactory

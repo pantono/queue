@@ -149,4 +149,9 @@ class QueueRepository extends MysqlRepository
 
         return $this->getDb()->fetchAll($select);
     }
+
+    public function getSubscriptionById(int $id): ?array
+    {
+        return $this->selectSingleRow('queue_subscription', 'id', $id);
+    }
 }

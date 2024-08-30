@@ -245,4 +245,9 @@ class QueueManager
         $listener = $this->factory->generateQueue($task->getQueueSubscription()->getQueue());
         $listener->send(['task_id' => $task->getId(), 'attempt' => $attempt + 1]);
     }
+
+    public function getSubscriptionById(int $id): ?QueueSubscription
+    {
+        return $this->hydrator->hydrate(QueueSubscription::class, $this->repository->getSubscriptionById($id));
+    }
 }

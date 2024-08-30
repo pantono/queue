@@ -1,6 +1,6 @@
 run_queue:
-  class: Pantono\Queue\RunQueue
+  class: Pantono\Queue\Command\RunQueue
 resend_task:
-  class: Pantono\Queue\ResendTask
+  class: Pantono\Queue\Command\ResendTask
 resend_late_tasks:
-  class: Pantono\Queue\ResendLateTasks
+  class: Pantono\Queue\Command\ResendLateTasks

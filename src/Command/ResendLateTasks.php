@@ -19,7 +19,7 @@ class ResendLateTasks extends Command
 
     protected function configure(): void
     {
-        $this->setName('app:resend-late-tasks');
+        $this->setName('queue:resend-late-tasks');
     }
 
     public function execute(InputInterface $input, OutputInterface $output): int

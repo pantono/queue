@@ -55,6 +55,7 @@ class QueueRepository extends MysqlRepository
     {
         $data = [
             'name' => $queue->getName(),
+            'short_name' => $queue->getShortName(),
             'date_created' => $queue->getDateCreated()->format('Y-m-d H:i:s'),
         ];
         $id = $this->insertOrUpdate('queue', 'id', $queue->getId(), $data);

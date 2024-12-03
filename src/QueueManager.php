@@ -205,6 +205,7 @@ class QueueManager
                 $event = new PreQueueTaskProcessEvent();
                 $event->setTaskId($taskId);
                 $event->setData($task->getParameters());
+                $this->dispatcher->dispatch($event);
                 if ($event->isSkip() === true) {
                     $task->setDateCompleted(new \DateTimeImmutable());
                     $task->setStatus(['skipped' => true]);

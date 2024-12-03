@@ -18,6 +18,8 @@ use Pantono\Hydrator\Traits\LocatorAwareTrait;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Pantono\Config\Config;
 use Pantono\Utilities\ApplicationHelper;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Pantono\Queue\Event\PreQueueTaskProcessEvent;
 
 class QueueManager
 {
@@ -32,13 +34,15 @@ class QueueManager
     private QueueFactory $factory;
     private Config $config;
     private string $queueName;
+    private EventDispatcher $dispatcher;
 
-    public function __construct(QueueRepository $repository, QueueFactory $factory, Hydrator $hydrator, Config $config)
+    public function __construct(QueueRepository $repository, QueueFactory $factory, Hydrator $hydrator, Config $config, EventDispatcher $dispatcher)
     {
         $this->repository = $repository;
         $this->hydrator = $hydrator;
         $this->factory = $factory;
         $this->config = $config;
+        $this->dispatcher = $dispatcher;
         $value = $config->getApplicationConfig()->getValue('queue.name');
         if (!$value) {
             $parts = explode(DIRECTORY_SEPARATOR, ApplicationHelper::getApplicationRoot());
@@ -189,6 +193,7 @@ class QueueManager
             }
             $task->getQueueSubscription()->setDateLastTask(new \DateTimeImmutable());
             $this->saveSubscription($task->getQueueSubscription());
+
             if ($output) {
                 $output->writeLn('[' . date('d/m/Y H:i:s') . '] Task ID: ' . $taskId . ' Task: ' . $task->getQueueSubscription()->getTaskName());
             }
@@ -197,6 +202,18 @@ class QueueManager
                 $task->setDatePickedUp(new \DateTimeImmutable());
                 $this->saveTask($task);
                 Timer::start('task');
+                $event = new PreQueueTaskProcessEvent();
+                $event->setTaskId($taskId);
+                $event->setData($task->getParameters());
+                if ($event->isSkip() === true) {
+                    $task->setDateCompleted(new \DateTimeImmutable());
+                    $task->setStatus(['skipped' => true]);
+                    $this->saveTask($task);
+                    if ($output) {
+                        $output->writeln('[' . date('d/m/Y H:i:s') . '] Task ID: ' . $taskId . ' has been skipped');
+                    }
+                    return;
+                }
                 $response = $controller->process(new ParameterBag($task->getParameters()));
                 Timer::end('task');
                 $task->setStatus($response);

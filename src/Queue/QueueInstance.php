@@ -48,5 +48,6 @@ class QueueInstance
         if ($this->consumer === null) {
             $this->consumer = $this->context->createConsumer($this->queue);
         }
+        $this->context->declareQueue($this->queue);
     }
 }

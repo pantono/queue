@@ -22,7 +22,7 @@ class DsnQueueFactory implements FactoryInterface
     {
         $dsn = DsnParser::parse($this->dsn);
         $scheme = $dsn->getScheme();
-        if ($scheme === 'rabbitmq') {
+        if ($scheme === 'amqp' || $scheme === 'amqps' || $scheme === 'rabbitmq' || $scheme === 'rabbit') {
             return new AmqpConnectionFactory($this->dsn);
         }
         if ($scheme === 'file') {

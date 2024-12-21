@@ -20,6 +20,7 @@ use Pantono\Config\Config;
 use Pantono\Utilities\ApplicationHelper;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Pantono\Queue\Event\PreQueueTaskProcessEvent;
+use Pantono\Queue\Filter\QueueTaskFilter;
 
 class QueueManager
 {
@@ -269,5 +270,13 @@ class QueueManager
     public function getSubscriptionById(int $id): ?QueueSubscription
     {
         return $this->hydrator->hydrate(QueueSubscription::class, $this->repository->getSubscriptionById($id));
+    }
+
+    /**
+     * @return QueueTask[]
+     */
+    public function getQueueTasksByFilter(QueueTaskFilter $filter): array
+    {
+        return $this->hydrator->hydrateSet(QueueTask::class, $this->repository->getQueueTasksByFilter($filter));
     }
 }

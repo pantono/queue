@@ -202,4 +202,18 @@ class QueueRepository extends MysqlRepository
         $select->limitPage($filter->getPage(), $filter->getPerPage());
         return $this->getDb()->fetchAll($select);
     }
+
+    public function getQueueStats(): array
+    {
+        $sql = <<<SQL
+SELECT 'total' as name, COUNT(1) as cnt from queue_task
+UNION ALL
+SELECT 'outstanding' as name, COUNT(1) from queue_task where date_picked_up IS NULL
+UNION ALL
+SELECT 'error' as name, COUNT(1) from queue_task where error is not null
+UNION ALL
+SELECT 'recent' as name, COUNT(1) as cnt from queue_task where date_created >= DATE_SUB(NOW(), INTERVAL 30 MINUTE)
+SQL;
+        return $this->getDb()->fetchAll($sql);
+    }
 }

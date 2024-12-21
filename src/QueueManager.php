@@ -279,4 +279,9 @@ class QueueManager
     {
         return $this->hydrator->hydrateSet(QueueTask::class, $this->repository->getQueueTasksByFilter($filter));
     }
+
+    public function getQueueStats(): array
+    {
+        return $this->repository->getQueueStats();
+    }
 }

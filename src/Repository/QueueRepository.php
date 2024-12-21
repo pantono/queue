@@ -8,6 +8,7 @@ use Pantono\Queue\Model\Queue;
 use Pantono\Queue\Model\QueueSubscription;
 use DateTimeInterface;
 use DateTime;
+use Pantono\Queue\Filter\QueueTaskFilter;
 
 class QueueRepository extends MysqlRepository
 {
@@ -153,5 +154,52 @@ class QueueRepository extends MysqlRepository
     public function getSubscriptionById(int $id): ?array
     {
         return $this->selectSingleRow('queue_subscription', 'id', $id);
+    }
+
+    public function getQueueTasksByFilter(QueueTaskFilter $filter): array
+    {
+        $select = $this->getDb()->select()->from('queue_task')
+            ->joinInner('queue_subscription', 'queue_task.subscription_id=queue_subscription.id', []);
+
+        if ($filter->getCompleted() === true) {
+            $select->where('date_completed IS NOT NULL');
+        }
+        if ($filter->getCompleted() === false) {
+            $select->where('date_completed IS NULL');
+        }
+        if ($filter->getPickedUp() === true) {
+            $select->where('date_picked_up IS NOT NULL');
+        }
+        if ($filter->getPickedUp() === false) {
+            $select->where('date_picked_up IS NULL');
+        }
+        if ($filter->getDatePickedUpStart() !== null) {
+            $select->where('date_picked_up >= ?', $filter->getDatePickedUpStart()->format('Y-m-d H:i:s'));
+        }
+        if ($filter->getDatePickedUpEnd() !== null) {
+            $select->where('date_picked_up <= ?', $filter->getDatePickedUpEnd()->format('Y-m-d H:i:s'));
+        }
+        if ($filter->getDateCompletedStart() !== null) {
+            $select->where('date_completed >= ?', $filter->getDateCompletedStart()->format('Y-m-d H:i:s'));
+        }
+        if ($filter->getDateCompletedEnd() !== null) {
+            $select->where('date_completed <= ?', $filter->getDateCompletedEnd()->format('Y-m-d H:i:s'));
+        }
+        if ($filter->getDateCreatedStart() !== null) {
+            $select->where('date_created >= ?', $filter->getDateCreatedStart()->format('Y-m-d H:i:s'));
+        }
+        if ($filter->getDateCreatedEnd() !== null) {
+            $select->where('date_created <= ?', $filter->getDateCreatedEnd()->format('Y-m-d H:i:s'));
+        }
+        if ($filter->getSubscription() !== null) {
+            $select->where('queue_task.subscription_id=?', $filter->getSubscription()->getId());
+        }
+        if ($filter->getTaskName() !== null) {
+            $select->where('queue_subscription.task_name=?', $filter->getTaskName());
+        }
+        $filter->setTotalResults($this->getCount($select));
+
+        $select->limitPage($filter->getPage(), $filter->getPerPage());
+        return $this->getDb()->fetchAll($select);
     }
 }

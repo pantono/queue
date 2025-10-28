@@ -36,6 +36,8 @@ class QueueManager
     private Config $config;
     private string $queueName;
     private EventDispatcher $dispatcher;
+    private ?QueueTask $currentTask = null;
+    private ?QueueTask $lastTask = null;
 
     public function __construct(QueueRepository $repository, QueueFactory $factory, Hydrator $hydrator, Config $config, EventDispatcher $dispatcher)
     {
@@ -185,6 +187,8 @@ class QueueManager
 
                 return;
             }
+            $this->currentTask = $task;
+            $this->lastTask = $task;
             $controller = $this->getLocator()->getClassAutoWire($task->getQueueSubscription()->getController());
             if (!$controller) {
                 $task->setError('No controller available ' . $task->getQueueSubscription()->getController());
@@ -231,6 +235,7 @@ class QueueManager
             if ($output !== null) {
                 $output->writeln('[' . date('d/m/Y H:i:s') . '] Task ID: ' . $taskId . ' Time Taken: ' . Timer::getTime('task') . 'ms');
             }
+            $this->currentTask = null;
         });
 
         return true;
@@ -283,5 +288,15 @@ class QueueManager
     public function getQueueStats(): array
     {
         return $this->repository->getQueueStats();
+    }
+
+    public function getCurrentTask(): ?QueueTask
+    {
+        return $this->currentTask;
+    }
+
+    public function getLastTask(): ?QueueTask
+    {
+        return $this->lastTask;
     }
 }
